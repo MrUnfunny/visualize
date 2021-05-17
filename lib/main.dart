@@ -1,15 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bubble.dart';
+import 'provider.dart';
 import 'themeData.dart';
-import 'utils.dart' as utils;
 
 Future<void> main() async {
   var prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(prefs));
+  runApp(ProviderScope(child: MyApp(prefs)));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Sort',
       theme: ThemeProvider(prefs).theme,
       home: SortingPage(title: 'Sort'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -36,51 +36,13 @@ class SortingPage extends StatefulWidget {
 }
 
 class _SortingPageState extends State<SortingPage> {
-  List<utils.Item> sortItems = [];
-  List<utils.Step> steps = [];
-  String message = '';
-  int delay = 100;
-  bool isSorting = false;
-
   @override
   void initState() {
     super.initState();
   }
 
-  void _createSortItems({int length = 7}) {
-    sortItems.clear();
-    steps.clear();
-    message = '';
-    isSorting = false;
-
-    final rand = Random();
-    for (var i = 0; i < length; i++) {
-      final tempNum = rand.nextInt(200);
-      var tempheight = tempNum + 1.0;
-      var tempwidth = MediaQuery.of(context).size.width / (2 * (length + 1));
-      final tempItem = utils.Item(
-        i,
-        tempNum,
-        tempheight,
-        tempwidth,
-        utils.defaultColor,
-      );
-
-      sortItems.add(tempItem);
-    }
-    bubble();
-    setState(() {});
-  }
-
-  void bubble() {
-    steps = bubbleSort(sortItems);
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (sortItems.isEmpty) {
-      _createSortItems();
-    }
     return Scaffold(
       backgroundColor: const Color(0xFFEFF2FA),
       appBar: AppBar(
@@ -118,47 +80,46 @@ class _SortingPageState extends State<SortingPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const IconButton(
-                icon: Icon(
+              IconButton(
+                icon: const Icon(
                   Icons.fast_rewind,
                   size: 30,
                 ),
-                onPressed: null,
+                onPressed: () =>
+                    context.read(sortProvider.notifier).previousStep(),
               ),
               const SizedBox(
                 width: 24,
               ),
-              IconButton(
-                icon: !isSorting
-                    ? const Icon(
-                        Icons.play_arrow,
-                        size: 30,
-                      )
-                    : const Icon(
-                        Icons.pause,
-                        size: 30,
-                      ),
-                onPressed: isSorting ? pause : play,
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-              const IconButton(
-                icon: Icon(
-                  Icons.fast_forward,
-                  size: 30,
-                ),
-                onPressed: null,
+              Consumer(
+                builder: (context, watch, child) {
+                  final val = watch(sortProvider).isSorting;
+                  return IconButton(
+                    icon: !val
+                        ? const Icon(
+                            Icons.play_arrow,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.pause,
+                            size: 30,
+                          ),
+                    onPressed: val ? pause : play,
+                  );
+                },
               ),
               const SizedBox(
                 width: 24,
               ),
               IconButton(
                 icon: const Icon(
-                  Icons.restore,
+                  Icons.fast_forward,
                   size: 30,
                 ),
-                onPressed: _createSortItems,
+                onPressed: () => context.read(sortProvider.notifier).nextStep(),
+              ),
+              const SizedBox(
+                width: 24,
               ),
             ],
           ),
@@ -173,83 +134,74 @@ class _SortingPageState extends State<SortingPage> {
         flex: 2,
         child: ListView(
           children: [
-            SortingBarWidget(sortItems: sortItems),
-            SortArrayWidget(sortItems: sortItems),
-            if (message.isNotEmpty) SortReasonWidget(message: message),
+            SortingBarWidget(),
+            SortArrayWidget(),
+            SortReasonWidget(),
           ],
         ),
       ),
       Expanded(
         flex: 1,
-        child: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Slider(
-                min: 2,
-                max: 40,
-                activeColor: Theme.of(context).accentColor,
-                inactiveColor: Colors.grey,
-                onChanged: (value) {
-                  _createSortItems(length: value.floor());
-                },
-                value: sortItems.length.toDouble(),
+        child: Consumer(
+          builder: (context, watch, child) {
+            final val = watch(sortProvider);
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
               ),
-              Text('${sortItems.length} elements'),
-              Slider(
-                min: 50,
-                max: 700,
-                activeColor: Theme.of(context).accentColor,
-                inactiveColor: Colors.grey,
-                onChanged: (value) {
-                  setState(() {
-                    delay = value.floor();
-                  });
-                },
-                value: delay.toDouble(),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Slider(
+                    min: 2,
+                    max: 40,
+                    activeColor: Theme.of(context).accentColor,
+                    inactiveColor: Colors.grey,
+                    onChanged: (value) {
+                      context.read(sortProvider.notifier).createSortItems(
+                            context,
+                            bubbleSort,
+                            length: value.floor(),
+                          );
+                    },
+                    value: val.current.list.length.toDouble(),
+                  ),
+                  Text('${val.current.list.length} elements'),
+                  Slider(
+                    min: 50,
+                    max: 700,
+                    activeColor: Theme.of(context).accentColor,
+                    inactiveColor: Colors.grey,
+                    onChanged: (value) {
+                      context
+                          .read(sortProvider.notifier)
+                          .setDelay(value.toInt());
+                    },
+                    value: val.delay.toDouble(),
+                  ),
+                  Text('${val.delay} ms'),
+                ],
               ),
-              Text('$delay ms'),
-            ],
-          ),
+            );
+          },
         ),
       )
     ];
   }
 
   void play() async {
-    // print(steps);
-    isSorting = true;
-    for (var step in steps) {
-      await Future<void>.delayed(
-        Duration(milliseconds: delay),
-      );
-      if (!isSorting) {
-        break;
-      }
-      setState(() {
-        sortItems = step.list;
-        message = step.reason;
-      });
-    }
+    var val = bubbleSort(context.read(sortProvider).current.list);
+    context.read(sortProvider.notifier).updateIterator(val);
+
+    await context.read(sortProvider.notifier).play();
   }
 
   void pause() async {
-    print('called stop');
-    setState(() {
-      isSorting = false;
-    });
+    context.read(sortProvider.notifier).setIsSorting(false);
   }
 }
 
 class SortReasonWidget extends StatelessWidget {
-  const SortReasonWidget({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
-
-  final String message;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -266,22 +218,18 @@ class SortReasonWidget extends StatelessWidget {
         vertical: 16,
       ),
       child: Center(
-        child: Text(
-          message,
-        ),
+        child: Consumer(builder: (context, watch, child) {
+          final msg = watch(sortProvider).message;
+          return Text(
+            msg,
+          );
+        }),
       ),
     );
   }
 }
 
 class SortArrayWidget extends StatelessWidget {
-  const SortArrayWidget({
-    Key? key,
-    required this.sortItems,
-  }) : super(key: key);
-
-  final List<utils.Item> sortItems;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -297,26 +245,30 @@ class SortArrayWidget extends StatelessWidget {
         vertical: 16,
       ),
       child: Center(
-        child: Wrap(
-          children: sortItems
-              .map(
-                (e) => Container(
-                  margin: const EdgeInsets.all(0.8),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    color:
-                        e.color == utils.defaultColor ? Colors.white : e.color,
-                  ),
-                  height: 50,
-                  width: 50,
-                  child: Center(
-                    child: Text(
-                      e.value.toString(),
+        child: Consumer(
+          builder: (context, watch, child) {
+            final val = watch(sortProvider).current.list;
+            return Wrap(
+              children: val
+                  .map(
+                    (e) => Container(
+                      margin: const EdgeInsets.all(0.8),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        color: e.color,
+                      ),
+                      height: 50,
+                      width: 50,
+                      child: Center(
+                        child: Text(
+                          e.value.toString(),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              )
-              .toList(),
+                  )
+                  .toList(),
+            );
+          },
         ),
       ),
     );
@@ -324,13 +276,6 @@ class SortArrayWidget extends StatelessWidget {
 }
 
 class SortingBarWidget extends StatelessWidget {
-  const SortingBarWidget({
-    Key? key,
-    required this.sortItems,
-  }) : super(key: key);
-
-  final List<utils.Item> sortItems;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -346,19 +291,26 @@ class SortingBarWidget extends StatelessWidget {
         vertical: 16,
       ),
       child: Center(
-        child: Wrap(
-          runSpacing: 20.0,
-          children: sortItems
-              .map(
-                (e) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                  height: e.height,
-                  width: e.width,
-                  color: e.color,
-                  child: Text(e.value.toString()),
-                ),
-              )
-              .toList(),
+        child: Consumer(
+          builder: (context, watch, child) {
+            final val = watch(sortProvider).current.list;
+
+            return Wrap(
+              crossAxisAlignment: WrapCrossAlignment.end,
+              runAlignment: WrapAlignment.spaceEvenly,
+              runSpacing: 20,
+              children: val
+                  .map(
+                    (e) => Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                      height: e.height,
+                      width: e.width,
+                      color: e.color,
+                    ),
+                  )
+                  .toList(),
+            );
+          },
         ),
       ),
     );
