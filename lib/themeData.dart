@@ -5,12 +5,12 @@ class ThemeProvider with ChangeNotifier {
   bool? _darkTheme;
   SharedPreferences prefs;
   Color _primaryColor = Colors.white;
-  Color _counterColor = Colors.black;
+  Color _counterColor = Colors.white;
 
   ThemeProvider(this.prefs) {
     _darkTheme = prefs.getBool('theme') ?? false;
     _primaryColor = _darkTheme! ? Colors.black : Colors.white;
-    _counterColor = _darkTheme! ? Colors.white : Colors.black;
+    _counterColor = _darkTheme! ? Colors.white : const Color(0xFF386AFF);
   }
 
   ThemeData get theme {

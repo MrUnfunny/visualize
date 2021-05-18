@@ -23,55 +23,36 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
   }
 
   void setDelay(int delay) {
-    state = state = ItemIterator(
-      steps: state.steps,
-      current: state.current,
-      index: state.index,
-      message: state.message,
-      delay: delay,
-      isSorting: state.isSorting,
-    );
+    state = state.copyWith(delay: delay);
   }
 
   void setIsSorting(bool isSorting) {
-    state = state = ItemIterator(
-      steps: state.steps,
-      current: state.current,
-      index: state.index,
-      message: state.message,
-      delay: state.delay,
-      isSorting: isSorting,
-    );
+    state = state.copyWith(isSorting: isSorting);
   }
 
   void nextStep() {
     if (state.index < state.steps.length - 1) {
-      state = ItemIterator(
-        steps: state.steps,
+      state = state.copyWith(
         current: state.steps[state.index + 1],
         index: state.index + 1,
         message: state.steps[state.index + 1].reason,
-        delay: state.delay,
-        isSorting: state.isSorting,
       );
     }
   }
 
   void previousStep() {
     if (state.index > 0) {
-      state = ItemIterator(
-        steps: state.steps,
+      state = state.copyWith(
         current: state.steps[state.index - 1],
         index: state.index - 1,
         message: state.steps[state.index - 1].reason,
-        delay: state.delay,
-        isSorting: state.isSorting,
       );
     }
   }
 
-  void createSortItems(BuildContext context, List<Step> Function(List<Item>) fn,
-      {int length = 7}) {
+  void createSortItems(
+      BuildContext context, List<Step> Function(List<Item>) fn, int length,
+      {int? width}) {
     var sortItems = <Item>[];
 
     final rand = Random();
@@ -80,13 +61,9 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
         setIsSorting(false);
       }
       final tempNum = rand.nextInt(200);
-      var tempheight = tempNum + 1.0;
-      var tempwidth = MediaQuery.of(context).size.width / (2 * (length + 1));
       final tempItem = Item(
         i,
         tempNum,
-        tempheight,
-        tempwidth,
         defaultColor,
       );
 
@@ -95,6 +72,9 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
     final steps = fn(sortItems);
     state = ItemIterator.fromSteps(steps: steps);
   }
+
+  //TODO: Implement creating Array from user input
+  void createFromArray() {}
 
   Future<void> play() async {
     setIsSorting(true);

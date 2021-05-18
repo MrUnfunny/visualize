@@ -9,8 +9,6 @@ List<Step> bubbleSort(List<Item> input) {
       Item(
         i,
         input[i].value,
-        input[i].height,
-        input[i].width,
         defaultColor,
       ),
     );
