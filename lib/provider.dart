@@ -70,7 +70,10 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
       sortItems.add(tempItem);
     }
     final steps = fn(sortItems);
-    state = ItemIterator.fromSteps(steps: steps);
+    state = ItemIterator.fromSteps(
+      steps: steps,
+      delay: state.delay,
+    );
   }
 
   //TODO: Implement creating Array from user input

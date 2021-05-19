@@ -29,7 +29,7 @@ List<Step> bubbleSort(List<Item> input) {
         result.add(
           Step(
             List<Item>.from(step.list),
-            'flip ${step.list[j].value} ${step.list[j + 1].value}',
+            '${step.list[j + 1].value} > ${step.list[j].value}, swap ${step.list[j].value} ${step.list[j + 1].value}',
           ),
         );
       } else {

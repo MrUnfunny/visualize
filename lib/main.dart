@@ -7,6 +7,7 @@ import 'provider.dart';
 import 'themeData.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
   runApp(ProviderScope(child: MyApp(prefs)));
 }
@@ -53,7 +54,7 @@ class _SortingPageState extends State<SortingPage> {
           if (dimen.maxWidth < 720) {
             return Column(
               children: getChildren(
-                minHeight: dimen.maxHeight * 0.2,
+                minHeight: dimen.maxHeight * 0.3,
                 maxWidth: dimen.maxWidth * 0.6,
               ),
             );
@@ -134,8 +135,10 @@ class _SortingPageState extends State<SortingPage> {
     );
   }
 
-  List<Widget> getChildren(
-      {required double minHeight, required double maxWidth}) {
+  List<Widget> getChildren({
+    required double minHeight,
+    required double maxWidth,
+  }) {
     return [
       Expanded(
         flex: 2,
@@ -143,7 +146,6 @@ class _SortingPageState extends State<SortingPage> {
           children: [
             SortingBarWidget(minHeight, maxWidth),
             SortArrayWidget(),
-            SortReasonWidget(),
           ],
         ),
       ),
@@ -214,7 +216,7 @@ class SideBarWidget extends StatelessWidget {
                       ),
                 ),
                 Slider(
-                  min: 50,
+                  min: 20,
                   max: 700,
                   activeColor: Theme.of(context).accentColor,
                   inactiveColor: Colors.grey,
@@ -230,6 +232,7 @@ class SideBarWidget extends StatelessWidget {
                   height: 20,
                 ),
                 const Divider(),
+
                 // Text(
                 //   'Create',
                 //   style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -277,18 +280,17 @@ class SortReasonWidget extends StatelessWidget {
         ),
         color: Colors.white,
       ),
-      padding: const EdgeInsets.all(32.0),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 32.0,
-        vertical: 16,
-      ),
+      padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: Consumer(builder: (context, watch, child) {
-          final msg = watch(sortProvider).message;
-          return Text(
-            msg,
-          );
-        }),
+        child: Consumer(
+          builder: (context, watch, child) {
+            final msg = watch(sortProvider).message;
+            return Text(
+              msg,
+              style: Theme.of(context).textTheme.headline6,
+            );
+          },
+        ),
       ),
     );
   }
@@ -366,20 +368,26 @@ class SortingBarWidget extends StatelessWidget {
           builder: (context, watch, child) {
             final val = watch(sortProvider).current.list;
 
-            return Wrap(
-              crossAxisAlignment: WrapCrossAlignment.end,
-              runAlignment: WrapAlignment.spaceEvenly,
-              runSpacing: 20,
-              children: val
-                  .map(
-                    (e) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      height: e.value + 1,
-                      width: maxWidth / (2 * val.length + 1),
-                      color: e.color,
-                    ),
-                  )
-                  .toList(),
+            return Column(
+              children: [
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  runAlignment: WrapAlignment.spaceAround,
+                  runSpacing: 20,
+                  spacing: 5.0,
+                  children: val
+                      .map(
+                        (e) => Container(
+                          // margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          height: e.value + 1,
+                          width: maxWidth / (2 * val.length + 1),
+                          color: e.color,
+                        ),
+                      )
+                      .toList(),
+                ),
+                SortReasonWidget()
+              ],
             );
           },
         ),
