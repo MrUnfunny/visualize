@@ -2,7 +2,7 @@ import 'utils.dart';
 
 List<Step> bubbleSort(List<Item> input) {
   var result = <Step>[];
-  var step = Step(<Item>[], 'starting position');
+  var step = Step(<Item>[], 'Starting position');
 
   for (var i = 0; i < input.length; i++) {
     step.list.add(
@@ -54,7 +54,7 @@ List<Step> bubbleSort(List<Item> input) {
         result.add(
           Step(
             List<Item>.from(step.list),
-            ' sorted',
+            'Sorted',
           ),
         );
       }

@@ -1,28 +1,32 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bubble.dart';
-import 'provider.dart';
-import 'themeData.dart';
+import 'providers/sort_provider.dart';
+import 'providers/theme_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var prefs = await SharedPreferences.getInstance();
-  runApp(ProviderScope(child: MyApp(prefs)));
+
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp(this.prefs);
-  final SharedPreferences prefs;
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sort',
-      theme: ThemeProvider(prefs).theme,
-      home: SortingPage(title: 'Sort'),
-      debugShowCheckedModeBanner: false,
+    return Consumer(
+      builder: (context, watch, child) {
+        final theme = watch(themeProvider).theme;
+        return MaterialApp(
+          title: 'Sort',
+          theme: theme,
+          home: SortingPage(title: 'Sort'),
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }
@@ -87,13 +91,27 @@ class _SortingPageState extends State<SortingPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.fast_rewind,
-                  size: 30,
+              Tooltip(
+                message: 'First Step',
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.first_page_rounded,
+                    size: 30,
+                  ),
+                  onPressed: () =>
+                      context.read(sortProvider.notifier).firstStep(),
                 ),
-                onPressed: () =>
-                    context.read(sortProvider.notifier).previousStep(),
+              ),
+              Tooltip(
+                message: 'Previous Step',
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.fast_rewind_rounded,
+                    size: 30,
+                  ),
+                  onPressed: () =>
+                      context.read(sortProvider.notifier).previousStep(),
+                ),
               ),
               const SizedBox(
                 width: 24,
@@ -103,13 +121,19 @@ class _SortingPageState extends State<SortingPage> {
                   final val = watch(sortProvider).isSorting;
                   return IconButton(
                     icon: !val
-                        ? const Icon(
-                            Icons.play_arrow,
-                            size: 30,
+                        ? const Tooltip(
+                            message: 'Play',
+                            child: Icon(
+                              Icons.play_arrow_rounded,
+                              size: 30,
+                            ),
                           )
-                        : const Icon(
-                            Icons.pause,
-                            size: 30,
+                        : const Tooltip(
+                            message: 'Pause',
+                            child: Icon(
+                              Icons.pause_rounded,
+                              size: 30,
+                            ),
                           ),
                     onPressed: val ? pause : play,
                   );
@@ -118,15 +142,30 @@ class _SortingPageState extends State<SortingPage> {
               const SizedBox(
                 width: 24,
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.fast_forward,
-                  size: 30,
+              Tooltip(
+                message: 'Next Step',
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.fast_forward_rounded,
+                    size: 30,
+                  ),
+                  onPressed: () =>
+                      context.read(sortProvider.notifier).nextStep(),
                 ),
-                onPressed: () => context.read(sortProvider.notifier).nextStep(),
               ),
               const SizedBox(
                 width: 24,
+              ),
+              Tooltip(
+                message: 'Last Step',
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.last_page_rounded,
+                    size: 30,
+                  ),
+                  onPressed: () =>
+                      context.read(sortProvider.notifier).lastStep(),
+                ),
               ),
             ],
           ),
@@ -154,9 +193,6 @@ class _SortingPageState extends State<SortingPage> {
   }
 
   void play() async {
-    var val = bubbleSort(context.read(sortProvider).current.list);
-    context.read(sortProvider.notifier).updateIterator(val);
-
     await context.read(sortProvider.notifier).play();
   }
 
@@ -179,7 +215,11 @@ class SideBarWidget extends StatelessWidget {
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
-            padding: const EdgeInsets.all(32),
+            padding: (kIsWeb)
+                ? const EdgeInsets.all(32)
+                : (Platform.isAndroid || Platform.isIOS)
+                    ? const EdgeInsets.all(16)
+                    : const EdgeInsets.all(32),
             child: ListView(
               children: [
                 Text(
@@ -189,8 +229,8 @@ class SideBarWidget extends StatelessWidget {
                       ),
                 ),
                 Slider(
-                  min: 2,
-                  max: 40,
+                  min: 7,
+                  max: 50,
                   activeColor: Theme.of(context).accentColor,
                   inactiveColor: Colors.grey,
                   onChanged: (value) {
@@ -370,17 +410,15 @@ class SortingBarWidget extends StatelessWidget {
 
             return Column(
               children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.end,
-                  runAlignment: WrapAlignment.spaceAround,
-                  runSpacing: 20,
-                  spacing: 5.0,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: val
                       .map(
                         (e) => Container(
                           // margin: const EdgeInsets.symmetric(horizontal: 5.0),
                           height: e.value + 1,
-                          width: maxWidth / (2 * val.length + 1),
+                          width: maxWidth / (1.8 * val.length + 1),
                           color: e.color,
                         ),
                       )

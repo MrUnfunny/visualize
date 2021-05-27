@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'bubble.dart';
 
 @immutable
 class Item {
@@ -58,13 +59,15 @@ class Step {
 
 @immutable
 class ItemIterator {
-  ItemIterator(
-      {required this.steps,
-      required this.current,
-      required this.index,
-      required this.message,
-      required this.delay,
-      required this.isSorting});
+  ItemIterator({
+    required this.steps,
+    required this.current,
+    required this.index,
+    required this.message,
+    required this.delay,
+    required this.isSorting,
+    required this.fn,
+  });
 
   factory ItemIterator.fromSteps({required List<Step> steps, int delay = 100}) {
     return ItemIterator(
@@ -74,6 +77,7 @@ class ItemIterator {
       message: 'Starting Position',
       delay: delay,
       isSorting: false,
+      fn: bubbleSort,
     );
   }
 
@@ -83,6 +87,7 @@ class ItemIterator {
   final String message;
   final int delay;
   final bool isSorting;
+  final List<Step> Function(List<Item>) fn;
 
   ItemIterator copyWith({
     List<Step>? steps,
@@ -91,6 +96,7 @@ class ItemIterator {
     String? message,
     int? delay,
     bool? isSorting,
+    List<Step> Function(List<Item>)? fn,
   }) {
     return ItemIterator(
       steps: steps ?? this.steps,
@@ -99,6 +105,7 @@ class ItemIterator {
       message: message ?? this.message,
       delay: delay ?? this.delay,
       isSorting: isSorting ?? this.isSorting,
+      fn: fn ?? this.fn,
     );
   }
 
@@ -121,6 +128,7 @@ final defaultSteps = [
       Item(3, 6, defaultColor),
       Item(4, 19, defaultColor),
       Item(5, 38, defaultColor),
+      Item(6, 18, defaultColor),
     ],
     'Starting Position',
   ),
