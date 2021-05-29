@@ -4,8 +4,8 @@ import 'models/item.dart';
 import 'models/step.dart';
 import 'sort-algos/bubble.dart';
 
-var defaultColor = const Color(0xFF8CDAD8).withOpacity(0.3);
 const matchActiveColor = Color(0xFF8CDAD8);
+final defaultColor = matchActiveColor.withOpacity(0.3);
 const sortedColor = Color(0xFF69F0AE);
 
 const Map<String, List<Step> Function(List<Item>)> sortAlgos = {
