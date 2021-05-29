@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils.dart';
 
-final themeProvider =
-    StateNotifierProvider<ThemeProviderState, ThemeProvider>((ref) {
-  return ThemeProviderState();
-});
+final themeProvider = StateNotifierProvider<ThemeProviderState, ThemeProvider>(
+  (ref) {
+    return ThemeProviderState();
+  },
+);
 
 class ThemeProviderState extends StateNotifier<ThemeProvider> {
   ThemeProviderState()
@@ -40,7 +42,7 @@ class ThemeProvider {
     this.darkTheme = false,
     this.prefs,
     this.primaryColor = Colors.white,
-    this.counterColor = matchActiveColor,
+    this.counterColor = sortedColor,
   });
 
   ThemeData get theme {
@@ -65,23 +67,12 @@ class ThemeProvider {
     return ThemeData(
       brightness: darkTheme ? Brightness.dark : Brightness.light,
       accentColor: counterColor,
-      fontFamily: 'Ubuntu',
       indicatorColor: counterColor,
       primaryColor: primaryColor,
       textTheme: TextTheme(
-        headline6: TextStyle(
-          color: counterColor,
-          fontFamily: 'Ubuntu',
-        ),
-        subtitle1: TextStyle(
-          color: counterColor,
-          fontFamily: 'Ubuntu',
-        ),
-        caption: TextStyle(
-          color: Colors.grey[400],
-          fontSize: 24,
-          fontFamily: 'Ubuntu',
-        ),
+        headline6: GoogleFonts.openSans().copyWith(color: counterColor),
+        subtitle1: GoogleFonts.openSans().copyWith(color: counterColor),
+        caption: GoogleFonts.openSans().copyWith(color: counterColor),
       ),
       appBarTheme: AppBarTheme(
         color: primaryColor,

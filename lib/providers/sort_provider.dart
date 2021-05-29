@@ -2,6 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../models/item.dart';
+import '../models/item_iterator.dart';
+import '../models/step.dart';
 import '../utils.dart';
 
 final sortProvider =
@@ -30,16 +34,22 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
     state = state.copyWith(isSorting: isSorting);
   }
 
-  void setFn(List<Step> Function(List<Item>) fn) {
-    state = state.copyWith(fn: fn);
+  void setSortFunction(String algoName) {
+    state = state.copyWith(
+      sortFunction: sortAlgos[algoName],
+      algoName: algoName,
+    );
   }
 
   void getSteps() {
-    final steps = state.fn(state.steps.first.list);
+    final steps = state.sortFunction(state.steps.first.list);
     updateIterator(steps);
   }
 
   void nextStep() {
+    if (state.steps.length == 1) {
+      getSteps();
+    }
     if (state.index < state.steps.length - 1) {
       state = state.copyWith(
         current: state.steps[state.index + 1],
@@ -79,8 +89,8 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
     );
   }
 
-  void createSortItems(
-      BuildContext context, List<Step> Function(List<Item>) fn, int length,
+  void createSortItems(BuildContext context,
+      List<Step> Function(List<Item>) sortFunction, int length,
       {int? width}) {
     var sortItems = <Item>[];
 
@@ -98,7 +108,7 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
 
       sortItems.add(tempItem);
     }
-    final steps = fn(sortItems);
+    final steps = sortFunction(sortItems);
     state = ItemIterator.fromSteps(
       steps: steps,
       delay: state.delay,

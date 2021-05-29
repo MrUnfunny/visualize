@@ -1,4 +1,7 @@
-import 'utils.dart';
+import '../models/item.dart';
+import '../models/step.dart';
+
+import '../utils.dart';
 
 List<Step> bubbleSort(List<Item> input) {
   var result = <Step>[];
