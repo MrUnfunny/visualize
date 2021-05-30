@@ -20,10 +20,7 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
         );
 
   void updateIterator(List<Step> steps) {
-    state = ItemIterator.fromSteps(
-      steps: steps,
-      delay: state.delay,
-    );
+    state = state.copyWith(steps: steps);
   }
 
   void setDelay(int delay) {
@@ -35,10 +32,13 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
   }
 
   void setSortFunction(String algoName) {
+    print('sort fn $algoName');
     state = state.copyWith(
       sortFunction: sortAlgos[algoName],
       algoName: algoName,
     );
+    getSteps();
+    firstStep();
   }
 
   void getSteps() {
@@ -89,9 +89,7 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
     );
   }
 
-  void createSortItems(BuildContext context,
-      List<Step> Function(List<Item>) sortFunction, int length,
-      {int? width}) {
+  void createSortItems(BuildContext context, int length, {int? width}) {
     var sortItems = <Item>[];
 
     final rand = Random();
@@ -108,10 +106,12 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
 
       sortItems.add(tempItem);
     }
-    final steps = sortFunction(sortItems);
-    state = ItemIterator.fromSteps(
+    final steps = state.sortFunction(sortItems);
+    state = state.copyWith(
       steps: steps,
-      delay: state.delay,
+      current: steps.first,
+      index: 0,
+      message: steps.first.reason,
     );
   }
 
