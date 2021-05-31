@@ -3,8 +3,6 @@ import '../models/step.dart';
 
 import '../utils.dart';
 
-//TODO: return proper reasons
-
 List<Step> insertionSort(List<Item> input) {
   var result = <Step>[];
   var step = Step(<Item>[], 'Starting Position');
@@ -27,39 +25,75 @@ List<Step> insertionSort(List<Item> input) {
 
     step.list[i] = step.list[i].copyWith(color: matchActiveColor);
 
+    if (step.list[j].value <= key.value) {
+      step.list[j] = step.list[j].copyWith(color: sortedColor);
+    }
+
     while (j >= 0 && j < step.list.length && step.list[j].value > key.value) {
-      step.list[j + 1] = step.list[j + 1].copyWith(color: matchActiveColor);
+      // Used to keep track if [j] and [j+1] elements are sorted in left side of
+      // key. This is used for color of these Items in the list.
+      var jSort = false;
+      var j1Sort = false;
+
+      if (step.list[j + 1].color == sortedColor) {
+        j1Sort = true;
+      }
+      if (step.list[j].color == sortedColor) {
+        jSort = true;
+      }
+
       step.list[j] = step.list[j].copyWith(color: matchActiveColor);
+      step.list[j + 1] = step.list[j + 1].copyWith(color: matchActiveColor);
 
       result.add(
         Step(
           List<Item>.from(step.list),
-          '${step.list[j].value} > ${key.value}, swap ${step.list[j].value} ${step.list[j + 1].value}',
+          'key = ${key.value}\n${step.list[j].value} > ${key.value}, Shift ${step.list[j].value} to left',
         ),
       );
 
-      step.list[j] = step.list[j].copyWith(color: defaultColor);
-      step.list[j + 1] = step.list[j + 1].copyWith(color: defaultColor);
+      if (jSort) {
+        step.list[j] = step.list[j].copyWith(color: sortedColor);
+      }
+      if (j1Sort) {
+        step.list[j + 1] = step.list[j + 1].copyWith(color: sortedColor);
+      }
 
       step.list[j + 1] = step.list[j];
       j--;
     }
+
     step.list[j + 1] = key;
+    step.list[j + 1] = step.list[j + 1].copyWith(color: sortedColor);
 
     if (i != j + 1) {
       result.add(
         Step(
           List<Item>.from(step.list),
-          '${step.list[j + 1].value} > ${key.value}, swap ${step.list[j + 1].value} ${key.value}',
+          'key = ${key.value}\nShift ${step.list[j + 2].value} and insert $key in place',
         ),
       );
     } else {
+      step.list[i] = step.list[i].copyWith(color: sortedColor);
       result.add(
         Step(
           List<Item>.from(step.list),
-          'Ignore',
+          'Ignore, ${step.list[i].value} is already largest',
         ),
       );
+    }
+
+    if (i == step.list.length - 1) {
+      step.list[i] = step.list[i].copyWith(color: sortedColor);
+      result.add(
+        Step(
+          List<Item>.from(step.list),
+          'Sorted',
+        ),
+      );
+    }
+    if (step.list[i].color != sortedColor) {
+      step.list[i] = step.list[i].copyWith(color: defaultColor);
     }
   }
   return result;

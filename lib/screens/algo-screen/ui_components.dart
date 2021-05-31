@@ -130,6 +130,7 @@ class SortReasonWidget extends StatelessWidget {
             final msg = watch(sortProvider).message;
             return Text(
               msg,
+              textAlign: TextAlign.center,
               style: GoogleFonts.comicNeue().copyWith(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
