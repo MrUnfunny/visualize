@@ -32,7 +32,7 @@ List<Step> selectionSort(List<Item> input) {
         result.add(
           Step(
             List<Item>.from(step.list),
-            '${step.list[j].value} < ${step.list[smallest].value}, smallest = ${step.list[j].value}',
+            '\n${step.list[j].value} < ${step.list[smallest].value}, smallest = ${step.list[j].value}',
           ),
         );
         if (i != smallest) {
@@ -64,7 +64,7 @@ List<Step> selectionSort(List<Item> input) {
     result.add(
       Step(
         List<Item>.from(step.list),
-        'Swap ${step.list[i].value} ${step.list[smallest].value}',
+        '\nSwap ${step.list[i].value} ${step.list[smallest].value}',
       ),
     );
   }

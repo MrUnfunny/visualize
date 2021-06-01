@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/algorithm.dart';
 import '../models/item.dart';
 import '../models/item_iterator.dart';
 import '../models/step.dart';
@@ -31,22 +32,23 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
     state = state.copyWith(isSorting: isSorting);
   }
 
-  void setSortFunction(String algoName) {
-    print('sort fn $algoName');
+  void setSortFunction(Algorithm algorithm) {
+    print('sort fn ${algorithm.name}');
     state = state.copyWith(
-      sortFunction: sortAlgos[algoName],
-      algoName: algoName,
+      algorithm: algorithm,
+      isSorting: false,
     );
     getSteps();
     firstStep();
   }
 
   void getSteps() {
-    final steps = state.sortFunction(state.steps.first.list);
+    final steps = state.algorithm.function(state.steps.first.list);
     updateIterator(steps);
   }
 
   void nextStep() {
+    print('next');
     if (state.steps.length == 1) {
       getSteps();
     }
@@ -106,7 +108,7 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
 
       sortItems.add(tempItem);
     }
-    final steps = state.sortFunction(sortItems);
+    final steps = state.algorithm.function(sortItems);
     state = state.copyWith(
       steps: steps,
       current: steps.first,
@@ -125,7 +127,7 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
     setIsSorting(true);
     while (state.index != state.steps.length - 1 && state.isSorting) {
       await Future<void>.delayed(Duration(milliseconds: state.delay));
-
+      if (!state.isSorting) break;
       nextStep();
     }
     setIsSorting(false);

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import '../sort-algos/bubble.dart';
 
-import 'item.dart';
+import '../utils.dart';
+import 'algorithm.dart';
 import 'step.dart';
 
 @immutable
@@ -13,8 +13,7 @@ class ItemIterator {
     required this.message,
     required this.delay,
     required this.isSorting,
-    required this.sortFunction,
-    required this.algoName,
+    required this.algorithm,
   });
 
   factory ItemIterator.fromSteps({required List<Step> steps, int delay = 100}) {
@@ -25,8 +24,7 @@ class ItemIterator {
       message: 'Starting Position',
       delay: delay,
       isSorting: false,
-      sortFunction: bubbleSort,
-      algoName: 'Bubble Sort',
+      algorithm: sortAlgos.first,
     );
   }
 
@@ -36,8 +34,7 @@ class ItemIterator {
   final String message;
   final int delay;
   final bool isSorting;
-  final List<Step> Function(List<Item>) sortFunction;
-  final String algoName;
+  final Algorithm algorithm;
 
   ItemIterator copyWith({
     List<Step>? steps,
@@ -46,8 +43,7 @@ class ItemIterator {
     String? message,
     int? delay,
     bool? isSorting,
-    List<Step> Function(List<Item>)? sortFunction,
-    String? algoName,
+    Algorithm? algorithm,
   }) {
     return ItemIterator(
       steps: steps ?? this.steps,
@@ -56,8 +52,7 @@ class ItemIterator {
       message: message ?? this.message,
       delay: delay ?? this.delay,
       isSorting: isSorting ?? this.isSorting,
-      sortFunction: sortFunction ?? this.sortFunction,
-      algoName: algoName ?? this.algoName,
+      algorithm: algorithm ?? this.algorithm,
     );
   }
 

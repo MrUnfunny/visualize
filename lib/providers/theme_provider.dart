@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils.dart';
-
 final themeProvider = StateNotifierProvider<ThemeProviderState, ThemeProvider>(
   (ref) {
     return ThemeProviderState();
@@ -18,7 +16,6 @@ class ThemeProviderState extends StateNotifier<ThemeProvider> {
         );
 
   void toggleTheme() async {
-    print('changed toggle');
     var prefs = state.prefs;
 
     prefs ??= await SharedPreferences.getInstance();
@@ -27,6 +24,7 @@ class ThemeProviderState extends StateNotifier<ThemeProvider> {
       darkTheme: !state.darkTheme,
       prefs: prefs,
       primaryColor: state.darkTheme ? Colors.white : Colors.black,
+      accentColor: state.darkTheme ? Colors.black : Colors.white,
     );
   }
 }
@@ -36,13 +34,13 @@ class ThemeProvider {
   final bool darkTheme;
   final SharedPreferences? prefs;
   final Color primaryColor;
-  final Color counterColor;
+  final Color accentColor;
 
   ThemeProvider({
     this.darkTheme = false,
     this.prefs,
     this.primaryColor = Colors.white,
-    this.counterColor = sortedColor,
+    this.accentColor = Colors.black,
   });
 
   ThemeData get theme {
@@ -53,36 +51,36 @@ class ThemeProvider {
     bool? darkTheme,
     SharedPreferences? prefs,
     Color? primaryColor,
-    Color? counterColor,
+    Color? accentColor,
   }) {
     return ThemeProvider(
       darkTheme: darkTheme ?? this.darkTheme,
       prefs: prefs ?? this.prefs,
       primaryColor: primaryColor ?? this.primaryColor,
-      counterColor: counterColor ?? this.counterColor,
+      accentColor: accentColor ?? this.accentColor,
     );
   }
 
   ThemeData themeData() {
     return ThemeData(
       brightness: darkTheme ? Brightness.dark : Brightness.light,
-      accentColor: counterColor,
-      indicatorColor: counterColor,
+      accentColor: accentColor,
+      indicatorColor: accentColor,
       primaryColor: primaryColor,
       textTheme: TextTheme(
-        headline6: GoogleFonts.openSans().copyWith(color: counterColor),
-        subtitle1: GoogleFonts.openSans().copyWith(color: counterColor),
-        caption: GoogleFonts.openSans().copyWith(color: counterColor),
+        headline6: GoogleFonts.openSans().copyWith(color: accentColor),
+        subtitle1: GoogleFonts.openSans().copyWith(color: accentColor),
+        caption: GoogleFonts.openSans().copyWith(color: accentColor),
       ),
       appBarTheme: AppBarTheme(
         color: primaryColor,
         iconTheme: IconThemeData(
-          color: counterColor,
+          color: accentColor,
         ),
       ),
       tabBarTheme: TabBarTheme(
-        labelColor: counterColor,
-        unselectedLabelColor: counterColor.withOpacity(0.3),
+        labelColor: accentColor,
+        unselectedLabelColor: accentColor.withOpacity(0.3),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'models/algorithm.dart';
 import 'models/item.dart';
 import 'models/step.dart';
 import 'sort-algos/bubble.dart';
@@ -10,11 +11,29 @@ const matchActiveColor = Color(0xFF8CDAD8);
 final defaultColor = matchActiveColor.withOpacity(0.3);
 const sortedColor = Color(0xFF69F0AE);
 
-const Map<String, List<Step> Function(List<Item>)> sortAlgos = {
-  'Bubble Sort': bubbleSort,
-  'Insertion Sort': insertionSort,
-  'Selection Sort': selectionSort,
-};
+final List<Algorithm> sortAlgos = [
+  Algorithm(
+    id: 0,
+    name: 'Bubble Sort',
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/Bubble_sort',
+    function: bubbleSort,
+  ),
+  Algorithm(
+    id: 0,
+    name: 'Insertion Sort',
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/Insertion_sort',
+    function: insertionSort,
+  ),
+  Algorithm(
+    id: 0,
+    name: 'Selection Sort',
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/Selection_sort',
+    function: selectionSort,
+  ),
+];
 
 final defaultSteps = [
   Step(
