@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'models/algorithm.dart';
 
 import 'models/visual_card.dart';
-import 'utils.dart';
 
 class HomePage extends StatelessWidget {
+  final List<Algorithm> children;
+
+  HomePage(this.children);
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -13,14 +16,16 @@ class HomePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: GridView.builder(
-                itemCount: sortAlgos.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                itemCount: children.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: constraints.maxWidth > 720
+                      ? (constraints.maxWidth / 200).floor()
+                      : 2,
                   crossAxisSpacing: 12.0,
                   mainAxisSpacing: 12.0,
                 ),
                 itemBuilder: (context, index) => VisualCard(
-                  algorithm: sortAlgos[index],
+                  algorithm: children[index],
                 ),
               ),
             ),
@@ -29,30 +34,6 @@ class HomePage extends StatelessWidget {
           return Container();
         }
       },
-    );
-  }
-}
-
-class HomeHorizontalList extends StatelessWidget {
-  final List<Widget> elements;
-
-  HomeHorizontalList({required this.elements});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 250,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: elements,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

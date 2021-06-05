@@ -48,7 +48,6 @@ class ItemIteratorState extends StateNotifier<ItemIterator> {
   }
 
   void nextStep() {
-    print('next');
     if (state.steps.length == 1) {
       getSteps();
     }

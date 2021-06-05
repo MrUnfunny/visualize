@@ -5,6 +5,7 @@ import 'models/item.dart';
 import 'models/step.dart';
 import 'sort-algos/bubble.dart';
 import 'sort-algos/insertion.dart';
+import 'sort-algos/merge.dart';
 import 'sort-algos/selection.dart';
 
 const matchActiveColor = Color(0xFF8CDAD8);
@@ -15,6 +16,7 @@ final List<Algorithm> sortAlgos = [
   Algorithm(
     id: 0,
     name: 'Bubble Sort',
+    algoType: AlgoType.sorting,
     image: 'image',
     url: 'https://en.wikipedia.org/wiki/Bubble_sort',
     function: bubbleSort,
@@ -22,6 +24,7 @@ final List<Algorithm> sortAlgos = [
   Algorithm(
     id: 0,
     name: 'Insertion Sort',
+    algoType: AlgoType.sorting,
     image: 'image',
     url: 'https://en.wikipedia.org/wiki/Insertion_sort',
     function: insertionSort,
@@ -29,9 +32,18 @@ final List<Algorithm> sortAlgos = [
   Algorithm(
     id: 0,
     name: 'Selection Sort',
+    algoType: AlgoType.sorting,
     image: 'image',
     url: 'https://en.wikipedia.org/wiki/Selection_sort',
     function: selectionSort,
+  ),
+  Algorithm(
+    id: 0,
+    name: 'Merge Sort',
+    algoType: AlgoType.sorting,
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/Selection_sort',
+    function: mergeSort,
   ),
 ];
 

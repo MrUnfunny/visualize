@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../providers/sort_provider.dart';
 import '../screens/algo-screen/sort_screen.dart';
 import 'algorithm.dart';
 
@@ -16,7 +18,6 @@ class VisualCard extends StatefulWidget {
 }
 
 class _VisualCardState extends State<VisualCard> {
-  late int fav;
   late Offset _tapPosition;
 
   @override
@@ -45,7 +46,7 @@ class _VisualCardState extends State<VisualCard> {
                         }
                       },
                       child: Text(
-                        '   Go to Wiki',
+                        '   Get more information',
                         style: TextStyle(
                           color: Theme.of(context).accentColor,
                         ),
@@ -59,6 +60,7 @@ class _VisualCardState extends State<VisualCard> {
           );
         },
         onTap: () {
+          context.read(sortProvider.notifier).setSortFunction(widget.algorithm);
           Navigator.push<Widget>(
             context,
             MaterialPageRoute(

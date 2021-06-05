@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'home_page.dart';
+import 'models/algorithm.dart';
 import 'providers/theme_provider.dart';
+import 'utils.dart';
 
 class Home extends StatefulWidget {
   final List<Widget> _categoryTabs = [
@@ -11,6 +13,9 @@ class Home extends StatefulWidget {
     ),
     const Tab(
       text: 'Algorithms',
+    ),
+    const Tab(
+      text: 'Mathematics',
     ),
   ];
   @override
@@ -24,7 +29,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
     _categoryController = TabController(
       vsync: this,
-      length: 2,
+      length: 3,
     );
   }
 
@@ -65,8 +70,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         body: TabBarView(
           controller: _categoryController,
           children: <Widget>[
-            HomePage(),
-            HomePage(),
+            HomePage(sortAlgos),
+            HomePage(sortAlgos
+                .where((element) => element.algoType == AlgoType.sorting)
+                .toList()),
+            HomePage(sortAlgos
+                .where((element) => element.algoType == AlgoType.mathematics)
+                .toList()),
           ],
         ),
       );

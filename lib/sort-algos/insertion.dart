@@ -32,15 +32,8 @@ List<Step> insertionSort(List<Item> input) {
     while (j >= 0 && j < step.list.length && step.list[j].value > key.value) {
       // Used to keep track if [j] and [j+1] elements are sorted in left side of
       // key. This is used for color of these Items in the list.
-      var jSort = false;
-      var j1Sort = false;
-
-      if (step.list[j + 1].color == sortedColor) {
-        j1Sort = true;
-      }
-      if (step.list[j].color == sortedColor) {
-        jSort = true;
-      }
+      var jSort = step.list[j].color == sortedColor;
+      var j1Sort = step.list[j + 1].color == sortedColor;
 
       step.list[j] = step.list[j].copyWith(color: matchActiveColor);
       step.list[j + 1] = step.list[j + 1].copyWith(color: matchActiveColor);
