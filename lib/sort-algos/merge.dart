@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart' show Colors;
 
 import '../models/item.dart';
@@ -23,8 +25,13 @@ List<Step> mergeSort(List<Item> input) {
 
   mergeSortAlgo(result, List<Item>.from(input), 0, input.length - 1);
 
+  final finalList = List<Item>.from(result.last.list);
+  finalList
+    ..first = finalList.first.copyWith(color: sortedColor)
+    ..last = finalList.last.copyWith(color: sortedColor);
+
   result.add(
-    Step(List<Item>.from(result.last.list), 'Sorted'),
+    Step(finalList, 'Sorted'),
   );
 
   return result;
@@ -49,48 +56,73 @@ void merge(List<Step> result, List<Item> a, int start, int mid, int end) {
 
   var i = 0, j = 0;
   for (var k = start; k <= end; k++) {
-    var iSorted = a[start + i].color == sortedColor;
-    var jSorted = a[start + j].color == sortedColor;
+    var activeIndexI = max(0, a.indexOf(l[i]));
+    var activeIndexJ = max(0, a.indexOf(r[j]));
 
-    a[start + i] = a[start + i].copyWith(color: matchActiveColor);
-    a[start + j] = a[start + j].copyWith(color: matchActiveColor);
+    var iSorted = a[activeIndexI].color == sortedColor;
+    var jSorted = a[activeIndexJ].color == sortedColor;
+
+    a[activeIndexI] = a[activeIndexI].copyWith(color: matchActiveColor);
+    a[activeIndexJ] = a[activeIndexJ].copyWith(color: matchActiveColor);
 
     if (l[i].value <= r[j].value) {
-      result.add(
-        Step(
-          List<Item>.from(a),
-          'start = $start, mid = $mid, end = $end',
-        ),
-      );
+      a[k] = l[i].copyWith(color: matchActiveColor);
 
-      if (iSorted) a[start + i] = a[start + i].copyWith(color: sortedColor);
-      if (jSorted) a[start + j] = a[start + j].copyWith(color: sortedColor);
-      a[k] = l[i];
+      if (l[i].value != 100000 && r[j].value != 100000) {
+        result.add(
+          Step(
+            List<Item>.from(a),
+            'start = $start, mid = $mid, end = $end\n${l[i].value} <= ${r[j].value} so insert ${l[i]} at index $k',
+          ),
+        );
+      } else {
+        result.add(
+          Step(
+            List<Item>.from(a),
+            'start = $start, mid = $mid, end = $end\n${l[i].value == 100000 ? r[j] : l[i]} is largest so insert it at index k',
+          ),
+        );
+      }
+
       a[k] = a[k].copyWith(color: sortedColor);
+
+      if (iSorted) {
+        a[activeIndexI] = a[activeIndexI].copyWith(color: sortedColor);
+      }
+      if (jSorted) {
+        a[activeIndexJ] = a[activeIndexJ].copyWith(color: sortedColor);
+      }
 
       i++;
     } else {
-      result.add(
-        Step(
-          List<Item>.from(a),
-          'start = $start, mid = $mid, end = $end',
-        ),
-      );
+      a[k] = r[j].copyWith(color: matchActiveColor);
+      if (l[i].value != 100000 && r[j].value != 100000) {
+        result.add(
+          Step(
+            List<Item>.from(a),
+            'start = $start, mid = $mid, end = $end\n${l[i].value} > ${r[j].value} so insert ${r[j]} at index $k',
+          ),
+        );
+      } else {
+        result.add(
+          Step(
+            List<Item>.from(a),
+            'start = $start, mid = $mid, end = $end\n${l[i].value == 100000 ? r[j] : l[i]} is largest so insert it at index $k',
+          ),
+        );
+      }
 
-      if (iSorted) a[start + i] = a[start + i].copyWith(color: sortedColor);
-      if (jSorted) a[start + j] = a[start + j].copyWith(color: sortedColor);
-      a[k] = r[j];
+      if (iSorted) {
+        a[activeIndexI] = a[activeIndexI].copyWith(color: sortedColor);
+      }
+      if (jSorted) {
+        a[activeIndexJ] = a[activeIndexJ].copyWith(color: sortedColor);
+      }
       a[k] = a[k].copyWith(color: sortedColor);
 
       j++;
     }
-    if (iSorted) a[start + i] = a[start + i].copyWith(color: sortedColor);
-    if (jSorted) a[start + j] = a[start + j].copyWith(color: sortedColor);
+    if (iSorted) a[activeIndexI] = a[activeIndexI].copyWith(color: sortedColor);
+    if (jSorted) a[activeIndexJ] = a[activeIndexJ].copyWith(color: sortedColor);
   }
-  result.add(
-    Step(
-      List<Item>.from(a),
-      'start = $start, mid = $mid, end = $end',
-    ),
-  );
 }
