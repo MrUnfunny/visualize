@@ -1,6 +1,10 @@
+import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
+
+import '../utils.dart';
 
 double pi = 0, total = 0, insideCircle = 0;
 List<List<double>> coordinates = [];
@@ -12,7 +16,7 @@ class PiApproximation extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -20,8 +24,8 @@ class PiApproximation extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          "Pi Approximation (Monte Carlo Method)",
-          style: TextStyle(
+          'Pi Approximation (Monte Carlo Method)',
+          style: const TextStyle(
             color: Colors.black,
             fontFamily: 'Ubuntu',
           ),
@@ -48,7 +52,7 @@ class PiApproximation extends StatelessWidget {
             ),
           ),
           Align(
-            alignment: Alignment(0, 0.5),
+            alignment: const Alignment(0, kIsWeb ? 0.7 : 0.5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -57,12 +61,12 @@ class PiApproximation extends StatelessWidget {
             ),
           ),
           Align(
-            alignment: Alignment(0, 0.9),
+            alignment: const Alignment(0, 0.9),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "Pi (approx): ",
+                const Text(
+                  'Pi (approx): ',
                   style: TextStyle(
                     fontFamily: 'Ubuntu',
                     fontSize: 20,
@@ -83,27 +87,27 @@ class BackgroundPainter extends CustomPainter {
   late double R;
   @override
   void paint(Canvas canvas, Size size) {
-    R = size.width / 2.1;
+    R = size.width / piRadius;
 
     final brush = Paint()
       ..color = Colors.white
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
-    canvas.drawCircle(
-      Offset(size.width / 2, size.height / 3),
-      R,
-      brush,
-    );
-
-    canvas.drawRect(
-      Rect.fromCenter(
-        center: Offset(size.width / 2, size.height / 3),
-        height: 2 * R,
-        width: 2 * R,
-      ),
-      brush,
-    );
+    canvas
+      ..drawCircle(
+        Offset(size.width / 2, size.height / 2.5),
+        R,
+        brush,
+      )
+      ..drawRect(
+        Rect.fromCenter(
+          center: Offset(size.width / 2, size.height / 2.5),
+          height: 2 * R,
+          width: 2 * R,
+        ),
+        brush,
+      );
   }
 
   @override
@@ -123,9 +127,9 @@ class _ValuesState extends State<Values> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => setState(() {}));
     return Text(
-      "\tDots inside circle (Red): ${insideCircle.toInt()}\n"
-      "Total dots (Red + Green): ${total.toInt()}",
-      style: TextStyle(
+      '\tDots inside circle (Red): ${insideCircle.toInt()}\n'
+      'Total dots (Red + Green): ${total.toInt()}',
+      style: const TextStyle(
         fontFamily: 'Ubuntu',
         fontSize: 20,
         color: Colors.white,
@@ -144,8 +148,8 @@ class _PiValueState extends State<PiValue> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => setState(() {}));
     return Text(
-      "${pi.toStringAsFixed(20)}",
-      style: TextStyle(
+      '${pi.toStringAsFixed(20)}',
+      style: const TextStyle(
         fontFamily: 'Ubuntu',
         fontSize: 20,
         color: Colors.black,
@@ -201,9 +205,9 @@ class DotPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double x, y;
-    R = size.width / 2.1;
+    R = size.width / piRadius;
 
-    for (int i = 0; i < 50; i++) {
+    for (var i = 0; i < 50; i++) {
       x = -R + 2 * random.nextDouble() * R;
       y = -R + 2 * random.nextDouble() * R;
 
@@ -221,7 +225,7 @@ class DotPainter extends CustomPainter {
           : brush.color = Colors.red;
 
       canvas.drawCircle(
-        Offset(size.width / 2 + x, size.height / 3 + y),
+        Offset(size.width / 2 + x, size.height / 2.5 + y),
         1,
         brush,
       );

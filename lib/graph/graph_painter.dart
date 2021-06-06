@@ -23,7 +23,7 @@ class GraphPainter extends CustomPainter {
       _showGraph = graph.isVisible;
       _graphPaint.color = graph.color;
     } catch (e) {
-      print(e);
+      print('error $e ${graph.function}');
       _showGraph = false;
     }
   }

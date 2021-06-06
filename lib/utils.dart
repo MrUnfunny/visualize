@@ -62,24 +62,6 @@ final List<Algorithm> sortAlgos = [
     function: mergeSort,
   ),
   Algorithm(
-    id: 4,
-    name: 'Wave',
-    algoType: AlgoType.physics,
-    image: 'image',
-    url: 'https://en.wikipedia.org/wiki/wave',
-    page: WavePage(),
-    function: mergeSort,
-  ),
-  Algorithm(
-    id: 5,
-    name: 'Optics',
-    algoType: AlgoType.physics,
-    image: 'image',
-    url: 'https://en.wikipedia.org/wiki/optics',
-    page: OpticsPage(),
-    function: mergeSort,
-  ),
-  Algorithm(
     id: 6,
     name: 'Graph',
     algoType: AlgoType.mathematics,
@@ -160,6 +142,24 @@ final List<Algorithm> sortAlgos = [
     page: MaurerRoseCurve(),
     function: mergeSort,
   ),
+  Algorithm(
+    id: 4,
+    name: 'Wave',
+    algoType: AlgoType.physics,
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/wave',
+    page: WavePage(),
+    function: mergeSort,
+  ),
+  Algorithm(
+    id: 5,
+    name: 'Optics',
+    algoType: AlgoType.physics,
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/optics',
+    page: OpticsPage(),
+    function: mergeSort,
+  ),
 ];
 
 final defaultSteps = [
@@ -176,3 +176,5 @@ final defaultSteps = [
     'Starting Position',
   ),
 ];
+
+var piRadius = 2.1;
