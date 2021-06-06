@@ -16,6 +16,7 @@ class Algorithm {
   final AlgoType algoType;
   final String image;
   final String url;
+  final Widget page;
   final List<Step> Function(List<Item>) function;
 
   Algorithm({
@@ -24,6 +25,7 @@ class Algorithm {
     required this.image,
     required this.url,
     required this.algoType,
+    required this.page,
     required this.function,
   });
 }

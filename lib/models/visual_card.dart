@@ -64,7 +64,7 @@ class _VisualCardState extends State<VisualCard> {
           Navigator.push<Widget>(
             context,
             MaterialPageRoute(
-              builder: (context) => SortingPage(),
+              builder: (context) => widget.algorithm.page,
             ),
           );
         },

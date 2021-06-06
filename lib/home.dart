@@ -17,6 +17,9 @@ class Home extends StatefulWidget {
     const Tab(
       text: 'Mathematics',
     ),
+    const Tab(
+      text: 'Physics',
+    ),
   ];
   @override
   _HomeState createState() => _HomeState();
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
     _categoryController = TabController(
       vsync: this,
-      length: 3,
+      length: 4,
     );
   }
 
@@ -76,6 +79,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 .toList()),
             HomePage(sortAlgos
                 .where((element) => element.algoType == AlgoType.mathematics)
+                .toList()),
+            HomePage(sortAlgos
+                .where((element) => element.algoType == AlgoType.physics)
                 .toList()),
           ],
         ),

@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   fake_async:
     dependency: transitive
     description:
@@ -83,6 +90,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -90,6 +104,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.0+3"
+  flutter_screenutil:
+    dependency: "direct main"
+    description:
+      name: flutter_screenutil
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0+2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -149,6 +170,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.10"
+  math_expressions:
+    dependency: "direct main"
+    description:
+      name: math_expressions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   meta:
     dependency: transitive
     description:
@@ -378,6 +406,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  uuid:
+    dependency: "direct main"
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.4"
   vector_math:
     dependency: transitive
     description:
