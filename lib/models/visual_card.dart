@@ -81,11 +81,11 @@ class _VisualCardState extends State<VisualCard> {
                 flex: 10,
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
-                  child: const Placeholder(),
-                  // child: Image.asset(
-                  //   widget.algorithm.image,
-                  //   fit: BoxFit.fill,
-                  // ),
+                  //child: const Placeholder(),
+                  child: Image.asset(
+                    widget.algorithm.image,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               Flexible(
