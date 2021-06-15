@@ -6,6 +6,7 @@ import 'models/step.dart';
 import 'sort-algos/bubble.dart';
 import 'sort-algos/insertion.dart';
 import 'sort-algos/merge.dart';
+import 'sort-algos/quick.dart';
 import 'sort-algos/selection.dart';
 
 const matchActiveColor = Color(0xFF8CDAD8);
@@ -44,6 +45,14 @@ final List<Algorithm> sortAlgos = [
     image: 'image',
     url: 'https://en.wikipedia.org/wiki/Selection_sort',
     function: mergeSort,
+  ),
+  Algorithm(
+    id: 0,
+    name: 'Quick Sort',
+    algoType: AlgoType.sorting,
+    image: 'image',
+    url: 'https://en.wikipedia.org/wiki/Selection_sort',
+    function: quickSort,
   ),
 ];
 

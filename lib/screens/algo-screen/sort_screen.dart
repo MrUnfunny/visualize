@@ -42,6 +42,7 @@ class _SortingPageState extends State<SortingPage> {
                         .setSortFunction(newValue ?? sortAlgos.first);
                   },
                   items: sortAlgos
+                      .where((e) => (e.algoType == AlgoType.sorting))
                       .map(
                         (e) => DropdownMenuItem<Algorithm>(
                           value: e,
