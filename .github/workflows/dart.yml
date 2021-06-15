@@ -1,44 +1,38 @@
-name: Dart CI
-
+name: Flutter CI
 on:
-  # Run on PRs and pushes to the master branch.
   push:
-    branches: [master]
   pull_request:
-    branches: [master]
-
-env:
-  PUB_ENVIRONMENT: bot.github
 
 jobs:
-  # Check code formatting and static analysis on Ubuntu.
-  analyze:
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        sdk: [stable]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.0
-        with:
-          sdk: ${{ matrix.sdk }}
-      - id: install
-        name: Install dependencies
-        run: dart pub get
-      - name: Check formatting
-        run: dart format --output=none --set-exit-if-changed .
 
-  # runs dart test
-  test:
-    needs: analyze
-    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        channel:
+          - stable
+
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.0
+
+      - uses: subosito/flutter-action@v1
         with:
-          sdk: stable
-      - name: Install dependencies
-        run: dart pub get
-      - name: Run VM tests
-        run: dart test --platform vm
+          channel: ${{ matrix.channel }}
+
+      # Get flutter dependencies.
+      - run: flutter pub get
+
+      # Check for any formatting issues in the code.
+      - run: flutter format --set-exit-if-changed .
+
+      # Statically analyze the Dart code for any errors.
+      - run: flutter analyze .
+
+      # Build apk.
+      - run: flutter build apk
+
+      # Upload generated apk to the artifacts.
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
