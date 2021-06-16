@@ -40,6 +40,8 @@ int partition(List<Step> result, int low, int high) {
 
   var step = List<Item>.from(result.last.list);
 
+  step[pivot] = step[pivot].copyWith(color: matchActiveColor);
+
   var i = low - 1;
 
   for (var j = low; j < high; j++) {
@@ -50,7 +52,35 @@ int partition(List<Step> result, int low, int high) {
       step[j] = step[i];
       step[i] = temp;
 
-      result.add(Step(step, 'reason'));
+      var iSorting = step[i].color == sortedColor;
+
+      step[i] = step[i].copyWith(color: matchActiveColor);
+      step[j] = step[j].copyWith(color: matchActiveColor);
+
+      result.add(Step(List<Item>.from(step),
+          '${step[i].value} <= ${step[pivot].value}, so swap ${step[i].value} ${step[j].value}'));
+
+      step[i] = step[i].copyWith(color: iSorting ? sortedColor : defaultColor);
+      step[j] = step[j].copyWith(color: sortedColor);
+    } else {
+      var iSorting = true;
+      if (i != -1) {
+        iSorting = step[i].color == sortedColor;
+      }
+      var jSorting = step[j].color == sortedColor;
+      if (i != -1) {
+        step[i] =
+            step[i].copyWith(color: iSorting ? sortedColor : matchActiveColor);
+      }
+      step[j] = step[j].copyWith(color: matchActiveColor);
+
+      result.add(Step(List<Item>.from(step),
+          '${step[j].value} > ${step[pivot].value}, Ignore'));
+      if (i != -1) {
+        step[i] =
+            step[i].copyWith(color: iSorting ? sortedColor : defaultColor);
+      }
+      step[j] = step[j].copyWith(color: jSorting ? sortedColor : defaultColor);
     }
   }
 
@@ -58,7 +88,8 @@ int partition(List<Step> result, int low, int high) {
   step[pivot] = step[i + 1];
   step[i + 1] = temp;
 
-  result.add(Step(step, 'reason'));
+  step[i + 1] = step[i + 1].copyWith(color: sortedColor);
+  result.add(Step(List<Item>.from(step), 'swap with pivot element'));
 
   return i + 1;
 }
