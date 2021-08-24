@@ -23,7 +23,7 @@ class ThemeProviderState extends StateNotifier<ThemeProvider> {
     state = state.copyWith(
       darkTheme: !state.darkTheme,
       prefs: prefs,
-      primaryColor: state.darkTheme ? Colors.white : Colors.black,
+      primaryColor: state.darkTheme ? Colors.white : const Color(0xFF26283D),
       accentColor: state.darkTheme ? Colors.black : Colors.white,
     );
   }
@@ -40,7 +40,7 @@ class ThemeProvider {
     this.darkTheme = false,
     this.prefs,
     this.primaryColor = Colors.white,
-    this.accentColor = Colors.black,
+    this.accentColor = const Color(0xFF26283D),
   });
 
   ThemeData get theme {
@@ -64,7 +64,9 @@ class ThemeProvider {
   ThemeData themeData() {
     return ThemeData(
       brightness: darkTheme ? Brightness.dark : Brightness.light,
-      accentColor: accentColor,
+      scaffoldBackgroundColor:
+          darkTheme ? const Color(0xFF111422) : const Color(0xFFEFF2FA),
+      accentColor: darkTheme ? Colors.white : const Color(0xFF26283D),
       indicatorColor: accentColor,
       primaryColor: primaryColor,
       textTheme: TextTheme(
@@ -81,6 +83,10 @@ class ThemeProvider {
       tabBarTheme: TabBarTheme(
         labelColor: accentColor,
         unselectedLabelColor: accentColor.withOpacity(0.3),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor:
+            darkTheme ? const Color(0xFFCBCBCB) : const Color(0xFF111422),
       ),
     );
   }

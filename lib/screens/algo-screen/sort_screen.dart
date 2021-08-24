@@ -23,7 +23,6 @@ class _SortingPageState extends State<SortingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEFF2FA),
       appBar: AppBar(
         title: const Text(
           'Sort',

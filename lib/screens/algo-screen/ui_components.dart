@@ -17,8 +17,8 @@ class SideBarWidget extends StatelessWidget {
       builder: (context, watch, child) {
         final val = watch(sortProvider);
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
           ),
           padding: (kIsWeb)
               ? const EdgeInsets.all(32)
@@ -121,7 +121,6 @@ class SortReasonWidget extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(10),
         ),
-        color: Colors.white,
       ),
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -148,11 +147,11 @@ class SortArrayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
       ),
       padding: const EdgeInsets.all(32.0),
       margin: const EdgeInsets.symmetric(
@@ -200,11 +199,11 @@ class SortingBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
       ),
       padding: const EdgeInsets.all(32.0),
       margin: const EdgeInsets.symmetric(

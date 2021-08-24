@@ -24,3 +24,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets: 
+    - assets/thumbnails/bubble.gif
+    - assets/thumbnails/insertion.gif
+    - assets/thumbnails/merge.gif
+    - assets/thumbnails/quick.gif
+    - assets/thumbnails/selection.gif

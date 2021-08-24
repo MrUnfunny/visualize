@@ -81,11 +81,13 @@ class _VisualCardState extends State<VisualCard> {
                 flex: 10,
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
-                  child: const Placeholder(),
-                  // child: Image.asset(
-                  //   widget.algorithm.image,
-                  //   fit: BoxFit.fill,
-                  // ),
+                  // TODO: create dark mode gifs and add
+                  child: widget.algorithm.image == 'image'
+                      ? const Placeholder()
+                      : Image.asset(
+                          widget.algorithm.image,
+                          fit: BoxFit.fill,
+                        ),
                 ),
               ),
               Flexible(
