@@ -11,12 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
-      - run: npm install -g "@semantic-release/changelog"
-      - run: npm install -g "@semantic-release/git"
-
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
@@ -27,6 +21,13 @@ jobs:
       
       - run: flutter build apk --release --split-per-abi
       
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm install -g "@semantic-release/changelog"
+      - run: npm install -g "@semantic-release/git"
+      - run: npm install -g "pub-semantic-release"
+
       - name: Semantic Release
         run: |
           export NODE_PATH="$(npm root -g)"

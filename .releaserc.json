@@ -6,6 +6,7 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
+      "pub-semantic-release",
       [
         "@semantic-release/changelog",
         {
@@ -24,7 +25,8 @@
         {
         "assets": [
           {
-            "path": "build/app/outputs/apk/flutter-apk/app-release.apk", "label": "apk file"
+            "path": "build/app/outputs/apk/flutter-apk/app-release.apk", 
+            "name": "visualize"
           }
         ]
       }]
