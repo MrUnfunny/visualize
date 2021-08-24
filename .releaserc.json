@@ -1,0 +1,33 @@
+{
+    "debug": true,
+    "branches": [
+      "master"     
+      ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "pub-semantic-release",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": ["pubspec.yaml", "CHANGELOG.md"],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      [
+        "@semantic-release/github", 
+        {
+        "assets": [
+          {
+            "path": "build/app/outputs/apk/flutter-apk/app-release.apk", "label": "apk file"
+          }
+        ]
+      }]
+    ]
+  }
