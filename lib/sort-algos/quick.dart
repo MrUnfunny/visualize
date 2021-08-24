@@ -21,7 +21,12 @@ List<Step> quickSort(List<Item> input) {
 
   quickSortAlgo(result, 0, result.last.list.length - 1);
 
-  result.add(Step(List<Item>.from(result.last.list), 'Sorted'));
+  var finalList = List<Item>.from(result.last.list);
+
+  for (var i = 0; i < finalList.length; i++) {
+    finalList[i] = finalList[i].copyWith(color: sortedColor);
+  }
+  result.add(Step(finalList, 'Sorted'));
 
   return result;
 }
@@ -40,55 +45,47 @@ int partition(List<Step> result, int low, int high) {
 
   var step = List<Item>.from(result.last.list);
 
-  step[pivot] = step[pivot].copyWith(color: matchActiveColor);
-
   var i = low - 1;
+
+  step[pivot] = step[pivot].copyWith(color: matchActiveColor);
 
   for (var j = low; j < high; j++) {
     if (step[j].value <= step[pivot].value) {
       i++;
 
-      var temp = step[j];
-      step[j] = step[i];
-      step[i] = temp;
-
-      var iSorting = step[i].color == sortedColor;
+      var iSorted = step[i].color == sortedColor;
+      var jSorted = step[j].color == sortedColor;
 
       step[i] = step[i].copyWith(color: matchActiveColor);
       step[j] = step[j].copyWith(color: matchActiveColor);
 
+      var temp = step[j];
+      step[j] = step[i];
+      step[i] = temp;
+
       result.add(Step(List<Item>.from(step),
           '${step[i].value} <= ${step[pivot].value}, so swap ${step[i].value} ${step[j].value}'));
 
-      step[i] = step[i].copyWith(color: iSorting ? sortedColor : defaultColor);
-      step[j] = step[j].copyWith(color: sortedColor);
+      step[i] = step[i].copyWith(color: iSorted ? sortedColor : defaultColor);
+      step[j] = step[j].copyWith(color: jSorted ? sortedColor : defaultColor);
     } else {
-      var iSorting = true;
-      if (i != -1) {
-        iSorting = step[i].color == sortedColor;
-      }
-      var jSorting = step[j].color == sortedColor;
-      if (i != -1) {
-        step[i] =
-            step[i].copyWith(color: iSorting ? sortedColor : matchActiveColor);
-      }
+      var jSorted = step[j].color == sortedColor;
+
       step[j] = step[j].copyWith(color: matchActiveColor);
 
       result.add(Step(List<Item>.from(step),
           '${step[j].value} > ${step[pivot].value}, Ignore'));
-      if (i != -1) {
-        step[i] =
-            step[i].copyWith(color: iSorting ? sortedColor : defaultColor);
-      }
-      step[j] = step[j].copyWith(color: jSorting ? sortedColor : defaultColor);
+
+      step[j] = step[j].copyWith(color: jSorted ? sortedColor : defaultColor);
     }
   }
+
+  step[pivot] = step[pivot].copyWith(color: sortedColor);
 
   var temp = step[pivot];
   step[pivot] = step[i + 1];
   step[i + 1] = temp;
 
-  step[i + 1] = step[i + 1].copyWith(color: sortedColor);
   result.add(Step(List<Item>.from(step), 'swap with pivot element'));
 
   return i + 1;
