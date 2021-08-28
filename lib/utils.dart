@@ -4,6 +4,7 @@ import 'models/algorithm.dart';
 import 'models/item.dart';
 import 'models/step.dart';
 import 'sort-algos/bubble.dart';
+import 'sort-algos/heapsort.dart';
 import 'sort-algos/insertion.dart';
 import 'sort-algos/merge.dart';
 import 'sort-algos/quick.dart';
@@ -23,7 +24,7 @@ final List<Algorithm> sortAlgos = [
     function: bubbleSort,
   ),
   Algorithm(
-    id: 0,
+    id: 1,
     name: 'Insertion Sort',
     algoType: AlgoType.sorting,
     image: 'assets/thumbnails/insertion.gif',
@@ -31,7 +32,7 @@ final List<Algorithm> sortAlgos = [
     function: insertionSort,
   ),
   Algorithm(
-    id: 0,
+    id: 2,
     name: 'Selection Sort',
     algoType: AlgoType.sorting,
     image: 'assets/thumbnails/selection.gif',
@@ -39,7 +40,7 @@ final List<Algorithm> sortAlgos = [
     function: selectionSort,
   ),
   Algorithm(
-    id: 0,
+    id: 3,
     name: 'Merge Sort',
     algoType: AlgoType.sorting,
     image: 'assets/thumbnails/merge.gif',
@@ -47,12 +48,20 @@ final List<Algorithm> sortAlgos = [
     function: mergeSort,
   ),
   Algorithm(
-    id: 0,
+    id: 4,
     name: 'Quick Sort',
     algoType: AlgoType.sorting,
     image: 'assets/thumbnails/quick.gif',
     url: 'https://en.wikipedia.org/wiki/Selection_sort',
     function: quickSort,
+  ),
+  Algorithm(
+    id: 5,
+    name: 'Heap Sort',
+    algoType: AlgoType.sorting,
+    image: 'assets/thumbnails/heap.gif',
+    url: 'https://en.wikipedia.org/wiki/Selection_sort',
+    function: heapSort,
   ),
 ];
 

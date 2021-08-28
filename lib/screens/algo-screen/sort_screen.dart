@@ -32,6 +32,7 @@ class _SortingPageState extends State<SortingPage> {
             child: Consumer(
               builder: (context, watch, child) {
                 return DropdownButton<Algorithm>(
+                  dropdownColor: Theme.of(context).appBarTheme.backgroundColor,
                   hint: const Text('Choose Sorting Algo'),
                   value: watch(sortProvider).algorithm,
                   onChanged: (newValue) {
