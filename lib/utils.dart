@@ -8,6 +8,7 @@ import 'sort-algos/heapsort.dart';
 import 'sort-algos/insertion.dart';
 import 'sort-algos/merge.dart';
 import 'sort-algos/quick.dart';
+import 'sort-algos/radix.dart';
 import 'sort-algos/selection.dart';
 
 const matchActiveColor = Color(0xFF8CDAD8);
@@ -62,6 +63,14 @@ final List<Algorithm> sortAlgos = [
     image: 'assets/thumbnails/heap.gif',
     url: 'https://en.wikipedia.org/wiki/Selection_sort',
     function: heapSort,
+  ),
+  Algorithm(
+    id: 6,
+    name: 'Radix Sort',
+    algoType: AlgoType.sorting,
+    image: 'assets/thumbnails/heap.gif',
+    url: 'https://en.wikipedia.org/wiki/Selection_sort',
+    function: radixSort,
   ),
 ];
 

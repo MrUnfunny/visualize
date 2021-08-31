@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../models/item.dart';
 import '../models/step.dart';
 
@@ -41,11 +43,24 @@ void quickSortAlgo(List<Step> result, int low, int high) {
 }
 
 int partition(List<Step> result, int low, int high) {
-  var pivot = high;
+  var random = Random();
+  var pivot = low + random.nextInt(high - low);
 
   var step = List<Item>.from(result.last.list);
 
   var i = low - 1;
+
+  var temp1 = step[pivot].copyWith(color: matchActiveColor);
+  step[pivot] = step[high].copyWith(color: matchActiveColor);
+  step[high] = temp1;
+
+  result.add(Step(List<Item>.from(step),
+      'Randomly choose ${step[high]} and swapped it with ${step[pivot]}'));
+
+  step[pivot] = step[pivot].copyWith(color: defaultColor);
+  step[high] = step[high].copyWith(color: defaultColor);
+
+  pivot = high;
 
   step[pivot] = step[pivot].copyWith(color: matchActiveColor);
 
