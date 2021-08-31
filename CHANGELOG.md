@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/MrUnfunny/visualize/compare/v1.0.0...v1.0.1) (2021-08-31)
+
+
+### Bug Fixes
+
+* fixed quicksort to use randomized version and added radix sort ([994eaaa](https://github.com/MrUnfunny/visualize/commit/994eaaac7ad6371a9d8b4a458622941d5dad7166))
+
 # 1.0.0 (2021-08-28)
 
 
